@@ -1,0 +1,20 @@
+{
+  "name": "easyproxy",
+  "productName": "Easy Proxy",
+  "version": "0.0.1",
+  "description": "a simple proxy server",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xinpingwang/easyproxy"
+  },
+  "main": "dist/main.js",
+  "scripts": {
+    "start": "tsc && electron ."
+  },
+  "author": "XinPing Wang",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^3.0.9",
+    "typescript": "^3.1.6"
+  }
+}
