@@ -7,9 +7,11 @@
     <!--Bootstrap CSS-->
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
     <!--Bootstrap JavaScript-->
-    <script src="node_modules/jquery/dist/jquery.js"></script>
-    <script src="node_modules/popper.js/dist/popper.js"></script>
-    <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script>
+        window.$ = window.jQuery = require("jquery");
+        require("popper.js");
+        require("bootstrap");
+    </script>
 </head>
 <body>
 <h1>Easy Proxy</h1>
