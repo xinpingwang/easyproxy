@@ -1,6 +1,8 @@
-import {app, BrowserWindow} from "electron";
+import {app, BrowserWindow, dialog, Event, ipcMain} from "electron";
+import {SimpleServer} from "./simple-server"
 
 let mainWindow: Electron.BrowserWindow;
+let simpleServer: SimpleServer;
 
 function createWindow() {
     // Create the browser window.
@@ -48,3 +50,21 @@ app.on("activate", () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+
+ipcMain.on("select-directory", function (event: Event) {
+    dialog.showOpenDialog({'properties': ['openDirectory']}, function (files: string[]) {
+        event.sender.send("selected-directory", files);
+    })
+});
+
+ipcMain.on("start-server", function (event: Event, dir: string, port: number) {
+    if (!dir || !port) {
+        return;
+    }
+    simpleServer = new SimpleServer(dir, port);
+    simpleServer.start();
+});
+
+ipcMain.on("stop-server", function () {
+    simpleServer.stop();
+});

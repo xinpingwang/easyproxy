@@ -12,6 +12,42 @@
         require("popper.js");
         require("bootstrap");
     </script>
+    <script>
+        const ipcRenderer = require("electron").ipcRenderer;
+
+        ipcRenderer.on("selected-directory", function (event, dirs) {
+            console.log(event);
+            if (dirs && dirs.length && dirs.length > 0) {
+                directory = dirs[0];
+            }
+        });
+
+        let directory;
+        let port;
+
+        function initPageEventHandler() {
+            $("#server-dir").keydown(function (event) {
+                ipcRenderer.send("select-directory");
+            });
+
+            $("#server-port").change(function (event) {
+                port = event.target.value;
+            });
+
+            $("#start-button").click(function () {
+                ipcRenderer.send("start-server", directory, port);
+            });
+
+            $("#stop-button").click(function () {
+                ipcRenderer.send("stop-server");
+            })
+        }
+
+        $(document).ready(function () {
+            initPageEventHandler();
+        });
+
+    </script>
 </head>
 <body>
 <h1>Easy Proxy</h1>
@@ -22,7 +58,7 @@
                 文件夹:
             </label>
             <div class="col-7">
-                <input type="file" class="form-control form-control-sm" id="server-dir">
+                <input type="text" class="form-control form-control-sm" id="server-dir">
             </div>
         </div>
         <div class="form-group row">
@@ -34,8 +70,8 @@
             </div>
         </div>
         <div class="row">
-            <button class="btn btn-sm btn-success col-3 offset-2">开始</button>
-            <button class="btn btn-sm btn-danger col-3 offset-2">停止</button>
+            <button class="btn btn-sm btn-success col-3 offset-2" id="start-button">开始</button>
+            <button class="btn btn-sm btn-danger col-3 offset-2" id="stop-button">停止</button>
         </div>
     </div>
 </div>
