@@ -16,9 +16,11 @@
         const ipcRenderer = require("electron").ipcRenderer;
 
         ipcRenderer.on("selected-directory", function (event, dirs) {
-            console.log(event);
             if (dirs && dirs.length && dirs.length > 0) {
                 directory = dirs[0];
+                $("#server-dir").val(directory);
+            } else {
+
             }
         });
 
@@ -28,6 +30,7 @@
         function initPageEventHandler() {
             $("#server-dir").keydown(function (event) {
                 ipcRenderer.send("select-directory");
+                event.preventDefault();
             });
 
             $("#server-port").change(function (event) {
@@ -58,7 +61,7 @@
                 文件夹:
             </label>
             <div class="col-7">
-                <input type="text" class="form-control form-control-sm" id="server-dir">
+                <input type="text" class="form-control form-control-sm" id="server-dir" placeholder="按任意键选择目录">
             </div>
         </div>
         <div class="form-group row">
