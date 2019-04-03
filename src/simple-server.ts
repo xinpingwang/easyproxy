@@ -1,4 +1,7 @@
-import {IncomingMessage, Server, ServerResponse} from "http";
+import { IncomingMessage, Server, ServerResponse } from "http";
+import * as fs from "fs";
+import * as url from "url";
+import * as path from "path"
 
 class SimpleServer {
 
@@ -9,8 +12,17 @@ class SimpleServer {
         this.port = port;
         this.server = new Server();
         this.server.on("request", function (request: IncomingMessage, response: ServerResponse) {
-            response.write("Hello World");
-            response.end();
+            let requestPath = url.parse(request.url).pathname;
+            let filePath = path.resolve(directory) + requestPath;
+            fs.stat(filePath, function (error, stats) {
+                if (!error && stats.isFile()) {
+                    response.writeHead(200);
+                    fs.createReadStream(filePath).pipe(response);
+                } else {
+                    response.writeHead(404);
+                    response.end("404 Node Found")
+                }
+            })
         })
     }
 
@@ -25,4 +37,4 @@ class SimpleServer {
     }
 }
 
-export {SimpleServer}
+export { SimpleServer }
